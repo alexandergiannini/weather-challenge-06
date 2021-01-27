@@ -7,8 +7,22 @@ h1 {
     color: white;
 }
 
-
-
 .weather-api-section {
     display: inline-flex; 
 }
+
+div.row {
+    border: 1px solid;
+    border-color: black; 
+  }
+
+  div.container {
+    padding-right: 900px; /*this is how im making the row smaller*/
+    padding-top: 20px;
+  
+  }
+
+  div p {
+      text-decoration: underline;
+      
+  }
