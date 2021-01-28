@@ -6,10 +6,12 @@ let searchTextField = document.querySelector(".search-text-field")
 let searchedCity = ''
 let cityName
 
-let myValue = "" ///testing the save cities function which works but isnt super robust
 
 let container = document.querySelector(".container")
 let textColumn1 = document.querySelector(".text-column-1")
+
+let currentWeatherSection = document.querySelector(".current-weather-section")
+let displayedCityName = document.querySelector(".city-name")
 
 
 searchTextButton.addEventListener("click", function (event) {
@@ -21,6 +23,7 @@ searchTextButton.addEventListener("click", function (event) {
    textColumn1.appendChild(searchedCity) /// i need to append this to a different place
     saveCities()
     console.log(searchedCity.textContent)
+    myWeather()
 })
 
 let saveCities = function () {
@@ -29,7 +32,6 @@ let saveCities = function () {
 
 let loadCities = function () {
     let cityText = JSON.stringify(localStorage)
-    console.log(cityText)
     return cityText.replace(/[{}:"",]/gi, '');
 }
 
@@ -55,5 +57,54 @@ let getCurrentWeather = function (argument) {
     })
 }
 
+//`https://api.openweathermap.org/data/2.5/weather?q=Portland&appid=${apiKey}`
+//`https://api.openweathermap.org/data/2.5/weather?q=Portland&appid=43ec9b071b79e32f1a5fb7f0d1a5d468`
 
 
+let myWeather = function () {
+    fetch(
+        `https://api.openweathermap.org/data/2.5/weather?q=${searchedCity.textContent}&appid=${apiKey}&units=imperial`
+      )
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(data) {
+          console.log(data);
+          let myCityName = document.createElement('p')
+          myCityName.textContent = searchedCity.textContent
+          displayedCityName.appendChild(myCityName)
+
+          let temperature = document.createElement('p')
+          temperature.textContent = `Temperature: ${data.main.temp}ºf`
+          displayedCityName.appendChild(temperature)
+
+          let humidity = document.createElement('p')
+          humidity.textContent = `Humidity: ${data.main.humidity}`
+          displayedCityName.appendChild(humidity)
+
+          let windSpeed = document.createElement('p')
+          windSpeed.textContent = `Wind Speed: ${data.wind.speed}`
+          displayedCityName.appendChild(windSpeed)
+
+
+            ///need to fix this and find the proper UV index property
+          let uvIndex = document.createElement('p')
+          uvIndex.textContent = `UV Index: ${data.current.uvi}`
+          displayedCityName.appendChild(uvIndex)
+
+         // receiveCurrentWeather() ///may need to call a receiveCurrentWeather function here
+        });
+}
+
+//myWeather()
+
+//let receiveCurrentWeather = function () {
+   // let myCityName = document.createElement('p')
+   // myCityName.textContent = searchedCity.textContent
+  //  displayedCityName.appendChild(myCityName)
+
+   // displayedCityName.textContent= searchedCity.textContent
+   // console.log(displayedCityName)
+//}
+
+//receiveCurrentWeather()
