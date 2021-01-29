@@ -17,6 +17,8 @@ div.row {
   }
 
   div.container {
+    position: absolute;
+    left: 1px; 
     padding-right: 900px; /*this is how im making the row smaller*/
     padding-top: 20px;
   
@@ -25,4 +27,18 @@ div.row {
   div p {
       text-decoration: underline;
       
+  }
+
+  .current-weather-section {
+    position: absolute;
+    left: 550px;
+  }
+
+
+
+  .five-day-weather-section {
+     padding-top: 500px;
+     position: absolute;
+     left: 550px;
+    
   }
