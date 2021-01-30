@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> <!--Utilizing bootstrap script here-->
     <link rel="stylesheet" href="styles.css">
     <title>Weather App</title>
 </head>
@@ -13,26 +13,27 @@
     </header>
     <main class=“overall-weather-content”> 
 
-      <!--aside-->
+      <!--Search Bar and Search History Section-->
       <aside>
         <h2>Search for a City:</h2>
         <form>
             <input class="search-text-field" type="text">
             <button class="search-text-submit" type="submit">Submit</button>
         </form>
-        <div class="container"> <!--container-->
-            <div class="row"> <!--class="row"-->
+        <div class="container">
+            <div class="row"> 
               <div class=“col”>
                 <p class="text-column-1">Please view Search History.</p>
               </div>
             </div>
         </div>
       </aside>
-       <!--aside-->
-
-      <div class="flex row justify-space-between"> <!--current-weather-section-->
-        <div class="current-weather-section">Current Weather:</div> <!--city-name--> <!--Current Weather:-->
+       
+      <!--Current Weather Section when search is inputted; JS appends html code here-->
+      <div class="flex row justify-space-between"> 
+        <div class="current-weather-section">Current Weather:</div> <!--city-name--> 
       </div>
+      <!--5 day weather Section; JS content is appended here when as search is submitted-->
       <div class="flex row justify-space-between">
         <div class="five-day-weather-section">
           <h3>5 Day Forecast:</h3>
@@ -40,7 +41,7 @@
       </div>
 
     </main>
-  
+    <!--Utilizing moment script below-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="script.js"></script>
 </body>

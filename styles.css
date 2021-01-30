@@ -7,10 +7,6 @@ h1 {
     color: white;
 }
 
-.weather-api-section {
-    display: inline-flex; 
-}
-
 div.row {
     border: 1px solid;
     border-color: black;
@@ -24,18 +20,19 @@ div.container {
     padding-top: 20px;
   }
 
-
 div p {
    text-decoration: underline;
    margin: 15px;
 } 
 
+/*css properties for the current weather section*/
   .current-weather-section {
     position: absolute;
     left: 550px;
     font-size: 30px;
   }
 
+  /*css properties for the 5 day weather section*/
   .five-day-weather-section {
      padding-top: 500px;
      position: absolute;
