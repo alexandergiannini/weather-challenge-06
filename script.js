@@ -50,14 +50,8 @@ let mySearchedCities = document.createElement('p')
 mySearchedCities.setAttribute("style", "font-weight: bold; text-align: center;")
 mySearchedCities.textContent = loadCities()
 textColumn1.appendChild(mySearchedCities)
-////maybe make a grid to display the value of loadCities
 
-//searchedCity.values = loadCities()
 let apiKey = "43ec9b071b79e32f1a5fb7f0d1a5d468"
-
-//`https://api.openweathermap.org/data/2.5/weather?q=Portland&appid=${apiKey}`
-//`https://api.openweathermap.org/data/2.5/weather?q=Portland&appid=43ec9b071b79e32f1a5fb7f0d1a5d468`
-
 
 let myWeather = function () {
     fetch(
@@ -74,33 +68,56 @@ let myWeather = function () {
             console.log(data);
           let myCityName = document.createElement('p')
           myCityName.textContent = `${searchedCity.textContent} (${currentDay})`
-          myCityName.setAttribute('style', 'padding-top: 10px;')
+          myCityName.setAttribute('style', 'padding-top: 10px; font-size: 35px;')
           currentWeatherSectionEl.appendChild(myCityName) //displayedCityName.appendChild(myCityName)
 
-          //need to fix this
           let weatherIcon = document.createElement('img')
-          weatherIcon.setAttribute('src', `http://openweather.map.org/img/wn/${data.weather[0].icon}@2xpng`)
+          weatherIcon.setAttribute('src', `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`)
           currentWeatherSectionEl.appendChild(weatherIcon)
 
           let temperature = document.createElement('p')
           temperature.textContent = `Temperature: ${data.main.temp}ºf`
-           currentWeatherSectionEl.appendChild(temperature)                                            ///  displayedCityName.appendChild(temperature)
+          temperature.setAttribute('style', 'font-size: 20px;')
+          currentWeatherSectionEl.appendChild(temperature)                                            ///  displayedCityName.appendChild(temperature)
 
           let humidity = document.createElement('p')
           humidity.textContent = `Humidity: ${data.main.humidity}%` ///need to fix humidity
+          humidity.setAttribute('style', 'font-size: 20px')
           currentWeatherSectionEl.appendChild(humidity)                           // displayedCityName.appendChild(humidity)
 
           let windSpeed = document.createElement('p')
           windSpeed.textContent = `Wind Speed: ${data.wind.speed} MPH`
+          windSpeed.setAttribute('style', 'font-size: 20px')
           currentWeatherSectionEl.appendChild(windSpeed)                                    //  displayedCityName.appendChild(windSpeed)
 
 
-            ///need to fix this and find the proper UV index property
-         // let uvIndex = document.createElement('p')
-         // uvIndex.textContent = `UV Index: ${data.current.uvi}`
-          //displayedCityName.appendChild(uvIndex)
+          fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${data.coord.lat}&lon=${data.coord.lon}&appid=${apiKey}&units=imperial&exclude=minutely,hourly`
+          )
+          .then(function (response) {
+            return response.json()
+          })
+          .then(function (data) {
+              console.log(data)
 
-         // receiveCurrentWeather() ///may need to call a receiveCurrentWeather function here
+              let uvIndex = document.createElement('p')
+              let uvIndexNum = data.current.uvi
+
+              if (uvIndexNum >= 8 && uvIndexNum <= 10.99) {
+                  uvIndex.setAttribute('style', 'color: darkred; font-weight: bold')
+              } else if (uvIndexNum >= 6 && uvIndexNum <= 7.99) {
+                uvIndex.setAttribute('style', 'color: orange; font-weight: bold')
+              } else if (uvIndexNum >= 3 && uvIndexNum <= 5.99) {
+                uvIndex.setAttribute('style', 'color: rgb(204,204,0); font-weight: bold')
+              } else if (uvIndexNum >= 11) {
+                  uvIndex.setAttribute('style', 'color: red; font-weight: bold')
+              } else if (uvIndexNum <= 2.99) {
+                  uvIndex.setAttribute('style', 'color: green; font-weight: bold')
+              }
+
+              uvIndex.textContent = `UV Index: ${uvIndexNum}`
+              currentWeatherSectionEl.appendChild(uvIndex)
+
+          })
         });
 }
 
@@ -115,6 +132,10 @@ let fiveDayWeather = function () {
 
         fiveDayWeatherSection.innerHTML = ''
 
+        let fiveDayWeatherHeader = document.createElement('h3')
+        fiveDayWeatherHeader.textContent = "5 Day Forecast:"
+        fiveDayWeatherSection.appendChild(fiveDayWeatherHeader)
+
         let tomorrowContainer = document.createElement('div')
         tomorrowContainer.className = 'container'
         tomorrowContainer.setAttribute('style', 'position: absolute; right: 500px;') //padding-left: 10px; ///be wary of this right property
@@ -123,12 +144,13 @@ let fiveDayWeather = function () {
 
         let tomorrowRow = document.createElement('div')
         tomorrowRow.className = 'row'
-        tomorrowRow.setAttribute('style', 'border: 1px solid; border-color: black; padding-right: 120px;')
+        tomorrowRow.setAttribute('style', 'border: 1px solid; border-color: black; padding-right: 120px; background-color: #1E90FF;')
         tomorrowContainer.appendChild(tomorrowRow)
 
 
         let tomorrowCol = document.createElement('div')
         tomorrowCol.className = 'col'
+        tomorrowCol.setAttribute('style', 'color: white')
         tomorrowRow.appendChild(tomorrowCol)
 
 
@@ -137,6 +159,10 @@ let fiveDayWeather = function () {
         tomorrowDate.textContent = tomorrow //`${data.list[6].dt_txt}`
         tomorrowDate.setAttribute('style', 'font-weight: bold; text-decoration: underline;')
         tomorrowCol.appendChild(tomorrowDate) //tomorrowBox.appendChild(tomorrowDate)   fiveDayWeatherSection.appendChild(tomorrowDate)
+
+        let tomorrowIcon = document.createElement('img')
+        tomorrowIcon.setAttribute('src', `http://openweathermap.org/img/wn/${data.list[6].weather[0].icon}@2x.png`)
+        tomorrowCol.appendChild(tomorrowIcon)
 
         let tomorrowTemp = document.createElement('p')
         tomorrowTemp.textContent = `Temp: ${data.list[6].main.temp}ºf`
@@ -157,12 +183,13 @@ let fiveDayWeather = function () {
 
         let twoDaysFromNowRow = document.createElement('div')
         twoDaysFromNowRow.className = 'row'
-        twoDaysFromNowRow.setAttribute('style', 'border: 1px solid; border-color: black; padding-right: 120px;')
+        twoDaysFromNowRow.setAttribute('style', 'border: 1px solid; border-color: black; padding-right: 120px; background-color: #1E90FF')
         twoDaysFromNowContainer.appendChild(twoDaysFromNowRow)
 
 
         let twoDaysFromNowCol = document.createElement('div')
         twoDaysFromNowCol.className = 'col'
+        twoDaysFromNowCol.setAttribute('style', 'color: white')
         twoDaysFromNowRow.appendChild(twoDaysFromNowCol)
 
 
@@ -172,6 +199,10 @@ let fiveDayWeather = function () {
         twoDaysFromNowDate.textContent = twoDays//`${data.list[14].dt_txt}`
         twoDaysFromNowDate.setAttribute('style', 'font-weight: bold; text-decoration: underline;')
         twoDaysFromNowCol.appendChild(twoDaysFromNowDate) //fiveDayWeatherSection.appendChild(twoDaysFromNowDate)
+
+        let twoDaysFromNowIcon = document.createElement('img')
+        twoDaysFromNowIcon.setAttribute('src', `http://openweathermap.org/img/wn/${data.list[14].weather[0].icon}@2x.png`)
+        twoDaysFromNowCol.appendChild(twoDaysFromNowIcon)
 
         let twoDaysFromNowTemp = document.createElement('p')
         twoDaysFromNowTemp.textContent = `Temp: ${data.list[14].main.temp}ºf`
@@ -194,12 +225,13 @@ let fiveDayWeather = function () {
 
         let threeDaysFromNowRow = document.createElement('div')
         threeDaysFromNowRow.className = 'row'
-        threeDaysFromNowRow.setAttribute('style', 'border: 1px solid; border-color: black; padding-right: 120px;')
+        threeDaysFromNowRow.setAttribute('style', 'border: 1px solid; border-color: black; padding-right: 120px; background-color: #1E90FF')
         threeDaysFromNowContainer.appendChild(threeDaysFromNowRow)
 
 
         let threeDaysFromNowCol = document.createElement('div')
         threeDaysFromNowCol.className = 'col'
+        threeDaysFromNowCol.setAttribute('style', 'color: white')
         threeDaysFromNowRow.appendChild(threeDaysFromNowCol)
 
 
@@ -211,6 +243,10 @@ let fiveDayWeather = function () {
         threeDaysFromNowDate.textContent = threeDays//`${data.list[22].dt_txt}`
         threeDaysFromNowDate.setAttribute('style', 'font-weight: bold; text-decoration: underline;')
         threeDaysFromNowCol.appendChild(threeDaysFromNowDate) //fiveDayWeatherSection.appendChild(threeDaysFromNowDate)
+
+        let threeDaysFromNowIcon = document.createElement('img')
+        threeDaysFromNowIcon.setAttribute('src', `http://openweathermap.org/img/wn/${data.list[22].weather[0].icon}@2x.png`)
+        threeDaysFromNowCol.appendChild(threeDaysFromNowIcon)
 
         let threeDaysFromNowTemp = document.createElement('p')
         threeDaysFromNowTemp.textContent = `Temp: ${data.list[22].main.temp}ºf`
@@ -230,12 +266,13 @@ let fiveDayWeather = function () {
 
         let fourDaysFromNowRow = document.createElement('div')
         fourDaysFromNowRow.className = 'row'
-        fourDaysFromNowRow.setAttribute('style', 'border: 1px solid; border-color: black; padding-right: 120px;')
+        fourDaysFromNowRow.setAttribute('style', 'border: 1px solid; border-color: black; padding-right: 120px; background-color: #1E90FF')
         fourDaysFromNowContainer.appendChild(fourDaysFromNowRow)
 
 
         let fourDaysFromNowCol = document.createElement('div')
         fourDaysFromNowCol.className = 'col'
+        fourDaysFromNowCol.setAttribute('style', 'color: white')
         fourDaysFromNowRow.appendChild(fourDaysFromNowCol)
 
 
@@ -246,6 +283,10 @@ let fiveDayWeather = function () {
         fourDaysFromNowDate.textContent = fourDays//`${data.list[30].dt_txt}`
         fourDaysFromNowDate.setAttribute('style', 'font-weight: bold; text-decoration: underline;')
         fourDaysFromNowCol.appendChild(fourDaysFromNowDate)  //fiveDayWeatherSection.appendChild(fourDaysFromNowDate)
+
+        let fourDaysFromNowIcon = document.createElement('img')
+        fourDaysFromNowIcon.setAttribute('src', `http://openweathermap.org/img/wn/${data.list[30].weather[0].icon}@2x.png`)
+        fourDaysFromNowCol.appendChild(fourDaysFromNowIcon)
 
         let fourDaysFromNowTemp = document.createElement('p')
         fourDaysFromNowTemp.textContent = `Temp: ${data.list[30].main.temp}ºf`
@@ -268,12 +309,13 @@ let fiveDayWeather = function () {
 
         let fiveDaysFromNowRow = document.createElement('div')
         fiveDaysFromNowRow.className = 'row'
-        fiveDaysFromNowRow.setAttribute('style', 'border: 1px solid; border-color: black; padding-right: 120px;')
+        fiveDaysFromNowRow.setAttribute('style', 'border: 1px solid; border-color: black; padding-right: 120px; background-color: #1E90FF')
         fiveDaysFromNowContainer.appendChild(fiveDaysFromNowRow)
 
 
         let fiveDaysFromNowCol = document.createElement('div')
         fiveDaysFromNowCol.className = 'col'
+        fiveDaysFromNowCol.setAttribute('style', 'color: white')
         fiveDaysFromNowRow.appendChild(fiveDaysFromNowCol)
 
 
@@ -282,6 +324,10 @@ let fiveDayWeather = function () {
         fiveDaysFromNowDate.textContent = fiveDays//`${data.list[38].dt_txt}`
         fiveDaysFromNowDate.setAttribute('style', 'font-weight: bold; text-decoration: underline;')
         fiveDaysFromNowCol.appendChild(fiveDaysFromNowDate) //fiveDayWeatherSection.appendChild(fiveDaysFromNowDate)
+
+        let fiveDaysFromNowIcon = document.createElement('img')
+        fiveDaysFromNowIcon.setAttribute('src', `http://openweathermap.org/img/wn/${data.list[38].weather[0].icon}@2x.png`)
+        fiveDaysFromNowCol.appendChild(fiveDaysFromNowIcon)
 
         let fiveDaysFromNowTemp = document.createElement('p')
         fiveDaysFromNowTemp.textContent = `Temp: ${data.list[38].main.temp}ºf`
