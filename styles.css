@@ -17,25 +17,24 @@ div.row {
      /*this is creating the weird border*/
   }
 
-  div.container {
+div.container {
     position: absolute;
     left: 1px; 
     padding-right: 900px; /*this is how im making the row smaller*/
     padding-top: 20px;
   }
 
-  div p {
-      text-decoration: underline;
-      
-  }
+
+div p {
+   text-decoration: underline;
+   margin: 15px;
+} 
 
   .current-weather-section {
     position: absolute;
     left: 550px;
     font-size: 30px;
   }
-
-
 
   .five-day-weather-section {
      padding-top: 500px;

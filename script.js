@@ -3,12 +3,12 @@
 let body = document.querySelector('body')
 let searchTextButton = document.querySelector(".search-text-submit")
 let searchTextField = document.querySelector(".search-text-field")
-let searchedCity = ''
+let searchedCity = ''//[]//''
 let cityName
 
 
 let container = document.querySelector(".container")
-let textColumn1 = document.querySelector(".text-column-1")
+let textColumn1 = document.querySelector(".text-column-1") //".text-column-1"
 
 let currentWeatherSection = document.querySelector(".current-weather-section")
 let displayedCityName = document.querySelector(".city-name")
@@ -24,25 +24,33 @@ let fiveDayWeatherSection = document.querySelector(".five-day-weather-section")
 
 ///declare global variables for each date from 5 days from now!!
 
+let stringArray = []
+
 searchTextButton.addEventListener("click", function (event) {
     event.preventDefault()
     let cityName = searchTextField.value
-    searchedCity = document.createElement('p')
+    searchedCity = document.createElement('p') //p //button
     searchedCity.setAttribute("style", "font-weight: bold; text-align: center;")
+    
     searchedCity.textContent = cityName
-   textColumn1.appendChild(searchedCity) /// i need to append this to a different place
+    textColumn1.appendChild(searchedCity) /// i need to append this to a different place
+
+ //  console.group(searchedCity) ///this is returning the search query accurately
+    stringArray.push(searchedCity.textContent)
+    console.log(stringArray)
+
+
     saveCities()
-    console.log(searchedCity.textContent)
     myWeather()
     fiveDayWeather()
 })
 
 let saveCities = function () {
-    localStorage.setItem(searchedCity.textContent, searchedCity.textContent) ///minor hack to getting the local storage to be set properly .textContent
+    localStorage.setItem(searchedCity.textContent, []) ///minor hack to getting the local storage to be set properly .textContent
 }
 
 let loadCities = function () {
-    let cityText = JSON.stringify(localStorage)
+    let cityText = JSON.stringify(localStorage) //JSON.stringify(localStorage)
     return cityText.replace(/[{}:"",]/gi, '');
 }
 
@@ -62,8 +70,8 @@ let myWeather = function () {
         })
         .then(function(data) {
 
-            let currentWeatherSectionEl = document.querySelector(".current-weather-section");
-            currentWeatherSectionEl.innerHTML = '';
+          let currentWeatherSectionEl = document.querySelector(".current-weather-section");
+          currentWeatherSectionEl.innerHTML = '';
 
             console.log(data);
           let myCityName = document.createElement('p')
@@ -78,17 +86,17 @@ let myWeather = function () {
           let temperature = document.createElement('p')
           temperature.textContent = `Temperature: ${data.main.temp}ºf`
           temperature.setAttribute('style', 'font-size: 20px;')
-          currentWeatherSectionEl.appendChild(temperature)                                            ///  displayedCityName.appendChild(temperature)
+          currentWeatherSectionEl.appendChild(temperature)                        
 
           let humidity = document.createElement('p')
-          humidity.textContent = `Humidity: ${data.main.humidity}%` ///need to fix humidity
+          humidity.textContent = `Humidity: ${data.main.humidity}%` 
           humidity.setAttribute('style', 'font-size: 20px')
-          currentWeatherSectionEl.appendChild(humidity)                           // displayedCityName.appendChild(humidity)
+          currentWeatherSectionEl.appendChild(humidity)                       
 
           let windSpeed = document.createElement('p')
           windSpeed.textContent = `Wind Speed: ${data.wind.speed} MPH`
           windSpeed.setAttribute('style', 'font-size: 20px')
-          currentWeatherSectionEl.appendChild(windSpeed)                                    //  displayedCityName.appendChild(windSpeed)
+          currentWeatherSectionEl.appendChild(windSpeed)             
 
 
           fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${data.coord.lat}&lon=${data.coord.lon}&appid=${apiKey}&units=imperial&exclude=minutely,hourly`
@@ -136,6 +144,9 @@ let fiveDayWeather = function () {
         fiveDayWeatherHeader.textContent = "5 Day Forecast:"
         fiveDayWeatherSection.appendChild(fiveDayWeatherHeader)
 
+
+
+
         let tomorrowContainer = document.createElement('div')
         tomorrowContainer.className = 'container'
         tomorrowContainer.setAttribute('style', 'position: absolute; right: 500px;') //padding-left: 10px; ///be wary of this right property
@@ -144,7 +155,7 @@ let fiveDayWeather = function () {
 
         let tomorrowRow = document.createElement('div')
         tomorrowRow.className = 'row'
-        tomorrowRow.setAttribute('style', 'border: 1px solid; border-color: black; padding-right: 120px; background-color: #1E90FF;')
+        tomorrowRow.setAttribute('style', 'border: 1px solid; border-color: black; padding-right: 150px; background-color: #1E90FF;')
         tomorrowContainer.appendChild(tomorrowRow)
 
 
@@ -295,9 +306,6 @@ let fiveDayWeather = function () {
         let fourDaysFromNowHumidity = document.createElement('p')
         fourDaysFromNowHumidity.textContent = `Humidity: ${data.list[30].main.humidity}%`
         fourDaysFromNowCol.appendChild(fourDaysFromNowHumidity)  ///fiveDayWeatherSection.appendChild(fourDaysFromNowHumidity)
-
-
-
 
 
 
