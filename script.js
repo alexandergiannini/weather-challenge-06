@@ -7,6 +7,8 @@ let cityName;
 let container = document.querySelector(".container");
 let textColumn1 = document.querySelector(".text-column-1");
 
+let col = document.querySelector(".col");
+
 let currentWeatherSection = document.querySelector(".current-weather-section");
 let displayedCityName = document.querySelector(".city-name");
 
@@ -19,22 +21,17 @@ let fiveDays = moment().add(5,'days').format('MM/DD/YYYY');
 
 let fiveDayWeatherSection = document.querySelector(".five-day-weather-section");
 
-let stringArray = []; //FOR LATER USE TO PUSH
-
 ///functionality when the user inputs/searches for a city
 searchTextButton.addEventListener("click", function (event) {
     event.preventDefault();
     let cityName = searchTextField.value;
     searchedCity = document.createElement('p'); 
-    searchedCity.setAttribute("style", "font-weight: bold; text-align: center;");
+    searchedCity.setAttribute('style', 'padding-left: 13px;');
+    //searchedCity.setAttribute("style", "font-weight: bold; text-align: left;"); /////  just in case
     
     searchedCity.textContent = cityName;
     textColumn1.appendChild(searchedCity); /// i need to append this to a different place
-
- //  console.group(searchedCity) ///this is returning the search query accurately
-    stringArray.push(searchedCity.textContent);
-    console.log(stringArray);
-
+  
 //calling different functions when the search is inputted to save the content, display current and 5 day weather
     saveCities();
     myWeather();
@@ -43,19 +40,51 @@ searchTextButton.addEventListener("click", function (event) {
 
 //Save cities function when search is inputted
 let saveCities = function () {
-    localStorage.setItem(searchedCity.textContent, []); ///minor hack to getting the local storage to be set properly .textContent
+    localStorage.setItem(searchedCity.textContent + '_', []); ///minor hack to getting the local storage to be set properly .textContent
 }
 
 //load cities function to load the previous searched cities
 let loadCities = function () {
-    let cityText = JSON.stringify(localStorage); //JSON.stringify(localStorage)
-    return cityText.replace(/[{}:"",]/gi, '');
+    let cityText = JSON.stringify(localStorage); 
+    cityText = cityText.replace(/[{}:"",]/gi, '');
+    cityText = cityText.replace(/[ ]/gi, '-'); ///we take the spaces inbetween the cities and replaced with -
+    cityText = cityText.replace(/[_]/gi, ' '); //replaced under score with a space
+    return cityText
 }
 
-let mySearchedCities = document.createElement('p');
-mySearchedCities.setAttribute("style", "font-weight: bold; text-align: center;");
-mySearchedCities.textContent = loadCities(); ///utilizing the load cities function to append previous searched cities here
-textColumn1.appendChild(mySearchedCities);
+let getString = loadCities().split(' '); ////this splits the string from local cities into spaces (separates los angeles and boston from a string), making into an array [los angeles, boston]
+
+for (let i = 0; i < getString.length; i++) { ///made for loop to distinguish by array length
+ container.appendChild((document.createElement('p'))); ///when this appends, this creates a new p element
+}
+
+let x = 0; ///this is the index for array getString
+for (let e of document.getElementsByTagName('p')) { //for every p tag on the site, it makes an object
+   { 
+     getString[x] = getString[x].replace(/[-]/gi, ' '); ///taking the dash out
+     e.innerHTML = getString[x]; ////this changes the text content of e to what comes back from getString
+  }
+x++; /// this increments the value x
+
+if (x === getString.length) { //when x equals the length, we subtract the index by 1
+  x--;
+  }
+}
+
+///functionality to select history to display current/5 day weather
+let ptag = document.getElementsByTagName('p'); ///referring to all the p tags within the array
+for (let i = 0; i < ptag.length; i++) {
+  ptag[i].addEventListener('click', myFunction);
+}
+function myFunction () {
+  window.onclick = e => {  ///window.click refers to anything u click, this function runs
+    if (e.target.tagName === 'P') { ///target is whatever u click, tagName is the specific method, needs to be capitalized
+    searchTextField.value = e.target.innerHTML;
+    searchTextButton.click();
+    }
+  }
+}
+
 
 let apiKey = "43ec9b071b79e32f1a5fb7f0d1a5d468"; ///Storing my weather api key in this variable to use in below functions
 
