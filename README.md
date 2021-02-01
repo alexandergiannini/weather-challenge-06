@@ -5,3 +5,5 @@
 # This is the URL for my github repo: https://github.com/alexandergiannini/weather-challenge-06
 
 # Screenshot for deployed application: <img width="1523" alt="Screen Shot 2021-01-30 at 12 05 11 PM" src="https://user-images.githubusercontent.com/74731953/106366844-68d07900-62f3-11eb-84fa-819caac6a60c.png">
+
+# PSA: The functionality of selecting a city within the search history doesn't work as intended on the very first initial page load. If you refresh the page after inputting searches, this functionality should behave as expected.
